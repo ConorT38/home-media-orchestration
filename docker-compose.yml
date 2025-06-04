@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  home-media-app-api:
+    build:
+      context: https://github.com/ConorT38/Home-media-app-api.git
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+
+  home-media-app:
+    build:
+      context: https://github.com/ConorT38/Home-media-app.git
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  torrent_agent:
+    build:
+      context: git@github.com:ConorT38/torrent_agent.git
+      dockerfile: Dockerfile
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: raspberry
+      MYSQL_DATABASE: homemedia
+      MYSQL_USER: pi
+      MYSQL_PASSWORD: raspberry
+    volumes:
+      - ./home-media.sql:/docker-entrypoint-initdb.d/home-media.sql
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
