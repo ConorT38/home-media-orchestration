@@ -1,3 +1,9 @@
+-- Create database homemedia
+CREATE DATABASE homemedia;
+
+-- Use the homemedia database
+USE homemedia;
+
 -- Create table for videos
 CREATE TABLE videos (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -16,11 +22,12 @@ CREATE TABLE shows (
 
 -- Create table for episodes
 CREATE TABLE episodes (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    video_id INT PRIMARY KEY,
     episode_number INT NOT NULL,
     show_id INT NOT NULL,
     name VARCHAR(255) NOT NULL,
     description TEXT,
+    FOREIGN KEY (video_id) REFERENCES videos(id),
     FOREIGN KEY (show_id) REFERENCES shows(id)
 );
 
